@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+<div class="title">Case Converter</div>
+<textarea></textarea>
+<button id="upper-case">Upper Case</button>
+<button id="lower-case">Lower Case</button>
+<button id="proper-case">Proper Case</button>
+<button id="sentence-case">Sentence Case</button>
+<button id="save-text-file">Save Text File</button>
+
+<script>
+    const upper_button = document.getElementById('upper-case');
+
+    upper_button.addEventListener('click', () => {
+        const textArea = document.querySelector('textarea');
+        textArea.value = textArea.value.toUpperCase();
+    });
+    const lower_button = document.getElementById('lower-case');
+
+    lower_button.addEventListener('click', () => {
+        const textArea = document.querySelector('textarea');
+        textArea.value = textArea.value.toLowerCase();
+    });
+
+    const proper_button = document.getElementById('proper-case');
+
+    proper_button.addEventListener('click', () => {
+        const textArea = document.querySelector('textarea');
+        textArea.value = textArea.value.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    });
+
+    const sentence_button = document.getElementById('sentence-case');
+
+    sentence_button.addEventListener('click', () => {
+        const textArea = document.querySelector('textarea');
+        textArea.value = textArea.value
+            .toLowerCase()
+            .replace(/(^\s*)([a-z])|([.!?]\s*)([a-z])/g, (_, p1, p2, p3, p4) =>
+                (p1 ?? p3) + (p2 ?? p4).toUpperCase()
+            );
+    });
+
+    const save_button = document.getElementById('save-text-file');
+    save_button.addEventListener('click', () => {
+        function download(filename, text) {
+            let element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+            element.setAttribute('download', filename);
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+        }
+
+// Start file download.
+        download("text.txt",document.querySelector('textarea').value);
+    });
+
+</script>
+</body>
+</html>
